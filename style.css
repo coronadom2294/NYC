@@ -1,0 +1,474 @@
+/*
+ * style.css
+ *
+ * css stylesheet for the general html page
+ */
+
+body {
+	background: url('');
+	text-align: center;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+	background: #eee;
+
+	/*background: #ccc;*/
+}
+
+h1 {
+	/* font-weight: bold; */
+/*	font-size: 20px;
+	line-height: 32px;
+	color: #fff;
+	padding: 10 px;
+	margin: 3px 0 10px;
+	text-align: left;
+//	border-bottom: 1px solid #fff;
+	text-shadow: 0px 0px 5px rgba(0,0,0,.9);*/
+}
+
+h2 {
+	text-align: left;
+}
+
+h3 {
+	font-weight: normal;
+	color: #006633;
+	padding: 10px;
+	margin: 0;
+	line-height: normal;
+	text-align: left;
+	text-transform: uppercase;
+	font-size: 1.75vw;        	
+}
+
+h4 {
+	text-align: left;
+}
+
+header {
+	padding:10px;
+	margin: 0px;
+	box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
+	background-color: black;
+}
+
+/*.view_image {
+	padding: 10px;
+	background: #fff;
+	border: 1px solid #ccc;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+	box-sizing: border-box;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	float:left;
+}*/
+
+.model_image {
+	padding: 10px;
+	background: #ff;
+	border: 1px solid #ccc;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+	box-sizing: border-box;
+	margin-bottom: 10px;	
+}
+
+img{
+	background-color:#fff;
+    padding:5px;
+    border:1px solid #ccc;
+    width: 80%;
+}
+
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#x3d_palace_model {
+	position: relative;
+	top: -15px;
+    background:#fff;
+ }
+
+.show_hypothesis{
+	background: #beb;
+}
+
+
+/*.active_view {
+	background: #afa;
+}*/
+
+.row{
+	margin: 0;
+}
+
+p {
+	text-align: left;
+	font-weight: normal;
+	font-size: 16px;
+	color: #999;
+	padding: 0px 10px;
+}
+
+a {
+	/* color: #3f81c5; */
+	color: #000000;
+	-webkit-transition: 0.3s opacity;
+	-moz-transition: 0.3s opacity;
+	text-decoration: none;
+}
+
+a:hover {
+	opacity: 0.5;
+}
+
+div#static_container {
+	height: 90%;
+	width: 100%;
+	position: relative;
+	top: 30px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 35px;
+	padding-right: 35px;
+/*	width: 100%;	
+	height: 90%;
+	background: #f9f9f9;
+	border: 1px solid #eee;
+	// padding: 10px;
+	// border-radius: 5px;
+	// box-sizing: border-box;
+	// box-shadow: 0px 0px 5px rgba(0,0,0,0.3);*/
+}
+
+
+div#container {
+	height: 90%;
+	width: 100%;
+	position: relative;
+	top: 30px;
+/*	width: 100%;	
+	height: 90%;
+	background: #f9f9f9;
+	border: 1px solid #eee;
+	// padding: 10px;
+	// border-radius: 5px;
+	// box-sizing: border-box;
+	// box-shadow: 0px 0px 5px rgba(0,0,0,0.3);*/
+}
+
+div#left {
+	height: 80%;
+	overflow: scroll;
+	width: 20%;
+	float: left;
+	background: #f9f9f9;
+	box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3);
+}
+
+div#main {
+	height: 80%;
+	width: 50%;
+	padding: 0px;
+	float: left;
+	text-align: left;
+	background: #aaa;
+	box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
+}
+
+div#right {
+	height: 80%;
+	width: 30%;
+	float: left;
+	background: #f9f9f9;
+	text-align: left;
+	box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3);
+	overflow: scroll;
+}
+
+div#tombright {
+	height: 70%;
+	width: 50%;
+	padding: 0px;
+	float: right;
+	text-align: left;
+	background: #aaa;
+	box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
+}
+
+div#tombleft {
+	height: 70%;
+	width: 50%;
+	float: left;
+	background: #f9f9f9;
+	text-align: left;
+	box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3);
+	overflow: scroll;
+}
+
+div#objectsleft {
+	height: 100%;
+	overflow: scroll;
+	width: 20%;
+	float: left;
+	box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3);
+}
+
+div#objectsmain {
+	height: 100%;
+	width: 50%;
+	padding: 5px;
+	float: left;
+	text-align: left;
+	background: black;
+	box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
+}
+
+div#objectsright {
+	height: 100%;
+	width: 29%;
+	float: left;
+	background: #f9f9f9;
+	text-align: left;
+	box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3);
+}
+
+div#views_container {
+	background: #eee;
+}
+
+div#view_button_container {
+	width: 1000px;
+	clear:both;
+	/*width:60%;*/
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	background: #eee;
+}
+
+div#tombbottom {
+	height: 30%;
+	width: 100%;
+/*	margin-left: 5%;
+	margin-right: 5%; */
+	overflow: scroll;
+	padding: 30px;
+	background: #eee;
+	float: left;
+	text-align: left;
+}
+
+
+div#views {
+	height: 20%;
+	width: 1000px;
+	clear:both;
+	/*width:60%;*/
+	margin-left: 10%;
+	margin-right: 10%;
+	overflow: hidden;
+	padding: 10px;
+	background: #eee;
+}
+
+.button {
+	position: absolute;
+	top: 80px;
+	float: left;
+	background-color: rgba(255,255,255,0.7);
+	border: 1px solid #eee;
+	padding: 3px;
+	border-radius: 2px;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+	z-index: 1;
+	cursor: pointer;
+}
+
+.more_button {
+	float: left;
+	background-color: rgba(255,255,255,0.7);
+	border: 1px solid #eee;
+	padding: 3px;
+	border-radius: 2px;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+	z-index: 1;
+	cursor: pointer;
+}
+
+.nav_button {
+	/*position: absolute;*/
+	/*bottom: 90px;*/
+	position: relative;
+	margin: 8px;
+	float: left;
+	background-color: rgba(255,255,255,0.5);
+	border: 1px solid #ccc;
+	padding: 8px;
+	border-radius: 2px;
+	box-sizing: border-box;
+	/*box-shadow: 0px 0px 3px rgba(0,0,0,0.3);*/
+	z-index: 1;
+	cursor: pointer;
+}
+
+#plan {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.object_button {
+	position: relative;
+	margin: 5px;
+	float: left;
+	background-color: rgba(255,255,255,0.5);
+	border: 1px solid #ccc;
+	padding: 5px;
+	border-radius: 2px;
+	box-sizing: border-box;
+	/*box-shadow: 0px 0px 3px rgba(0,0,0,0.3);*/
+	z-index: 1;
+	cursor: pointer;	
+}
+
+.view_button {
+	/*position: absolute;*/
+	/*bottom: 90px;*/
+	position: relative;
+	margin: 2px;
+	float: left;
+	background-color: rgba(255,255,255,0.5);
+	border: 1px solid #ccc;
+	padding: 2px;
+	border-radius: 2px;
+	box-sizing: border-box;
+	/*box-shadow: 0px 0px 3px rgba(0,0,0,0.3);*/
+	z-index: 1;
+	cursor: pointer;
+}
+
+
+.nav_button:hover{
+	background-color: rgba(255,255,255,1);
+}
+
+div {
+	/*overflow: scroll;	*/
+}
+
+/*  old ugly buttons replaced with navbar
+div#reset_button {
+	left: 550px;
+}
+
+div#overview_button {
+	left: 10px;
+}
+
+div#model_button {
+	left: 150px;
+}
+div#tomb_button {
+	left: 10px;
+	top: 105px;
+}
+div#other_button {
+	left:150px;
+	top: 105px;
+}
+
+div#sources_button {
+	left: 10px;
+	top: 130px;
+}
+*/
+
+div#hoverBlurb {
+ 	position: absolute;
+    float: left;
+    z-index: 1;
+    top: 15px;
+    left: 0px;
+	width: 150px;
+    height: 50px;
+    border: none;
+    background-color: rgba(255,255,255,0.5);
+    color: #222;
+    display:none;
+}
+
+
+.button:hover{
+	background-color: rgba(255,255,255,1);
+}
+
+
+/*
+  root element for the scrollable.
+  when scrolling occurs this element stays still.
+  */
+.scrollable {
+
+    /* required settings */
+    position:relative;
+    overflow:hidden;
+    width: 110px;
+    height:72px;
+
+    /* custom decorations */
+    border:1px solid #ccc;
+	background-color: rgba(255,255,255,0.7);
+
+}
+
+/*
+   root element for scrollable items. Must be absolutely positioned
+   and it should have a extremely large width to accomodate scrollable
+   items.  it's enough that you set the width and height for the root
+   element and not for this element.
+*/
+.scrollable .items {
+    /* this cannot be too large */
+    width:20000em;
+    position:absolute;
+    clear:both;
+
+}
+
+.items div {
+    float:left;
+    width:110px;
+}
+
+/* single scrollable item */
+.scrollable img {
+    float:left;
+    margin:5px 5px 5px 5px;
+    background-color:#fff;
+    padding:2px;
+    border:1px solid #ccc;
+    width:100px;
+    height:60px;
+
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
+
+/* active item */
+.scrollable .active {
+    border:2px solid #000;
+    position:relative;
+    cursor:default;
+}
+
+
+/* this makes it possible to add next button beside scrollable */
+.scrollable {
+    float:left;
+}
+

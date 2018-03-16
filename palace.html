@@ -1,0 +1,628 @@
+<html>
+<head>
+	<meta encoding="utf-8">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="x3dom.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="x3dom.css">
+    <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>  
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <title>Diligencia Basin</title>
+</head>
+<body onLoad="check();">
+
+        <script>
+        // simplify access to the X3D element
+        var $palaceElement = document.getElementById('x3d_palace_model');
+        var viewpoints = [];
+        var activeViewIndex = 1;
+        // var viewCount = viewpoints.length;
+        var viewCount = 14;
+        var currentIndex = 0;
+        var stripSize = 4;
+        var api;
+
+        function changeDescription(title) {
+            document.getElementById('description_title').innerHTML = title;
+        }
+
+        function init(event) {
+        //    $element = document.getElementById('the_element');
+            $palaceElement.runtime.ready = function() {
+                alert('Per element custom .runtime.ready() function.');
+            };
+
+            $palaceElement.runtime.enterFrame = function() {
+                //x3dom.debug.logInfo('Per element custom .runtime.enterFrame() function');
+            };
+        }
+
+        function prevView() {
+
+        $palaceElement.runtime.prevView();
+        $("#view"+activeViewIndex).removeClass("active_view");
+        if (activeViewIndex == 1) {
+            activeViewIndex = viewCount;
+            api.seekTo(activeViewIndex-1);
+        } else {
+            activeViewIndex--;
+        }
+        $("#view"+activeViewIndex).addClass("active_view");
+        changeDescription("view"+activeViewIndex);
+            
+            return false;
+        }
+
+        function nextView() {
+
+            $palaceElement.runtime.nextView();
+            // $palaceElement.runtime.lookAround();
+
+            $("#view"+activeViewIndex).removeClass("active_view");
+            if (activeViewIndex == viewCount) {
+                activeViewIndex = 1;
+                api.seekTo(activeViewIndex - 1);
+            } else {
+                activeViewIndex++;
+            }
+            $("#view"+activeViewIndex).addClass("active_view");
+            changeDescription("view"+activeViewIndex);
+            
+            return false;
+        }
+
+        function resetCurrentView() {
+            $palaceElement.runtime.resetView();
+            return false;
+        }
+
+        function initHypothesis() {
+            var hypotheses = ['SecondStoryStairs', 'SecondStory5', 
+                            'SecondStory6', 'SecondStory1', 'SecondStory2', 'SecondStory3', 'SecondStory4', 'Tower1', 'Tower2', 'Cistern', 'Roof2', 'Roof1',
+                                'Portico1', 'Portico2', 'NW1', 'NW2', 'NE1', 'Known', 'Gate',
+                                'SW1', 'SW2', 'CoAKnown', 'CoASW1', 'CoASW2', 'SeparateRoom1', 'SeparateRoom2', 'SeparateRoom3', 'SeparateRoom4', 'SeparateRoom5', 'SeparateRoomRoof', 'group_2'];
+            hypotheses.forEach(function (hypothesis) {
+                $("#palace__" +hypothesis).attr('render', false);
+            });
+
+            // var hypothesesToShow = ['Ground', 'Roof1', 'Cistern', 'Portico2', 'Known', 'Gate', 'SW1', 'NW2'];
+            var hypothesesToShow = [];
+            hypothesesToShow.forEach(function (hypothesis) {
+                $("#palace__" + hypothesis).attr('render', true);
+            });
+        }
+
+        function toggleHypothesis(hypothesisName) {
+            if ($("#"+hypothesisName).hasClass('show_hypothesis')) {
+                $("#"+hypothesisName).removeClass('show_hypothesis');
+                value = 'false';
+            } else {
+                $("#"+hypothesisName).addClass('show_hypothesis');
+                value = 'true';
+            }
+            $("#palace__"+hypothesisName).attr('render', value);
+            return false;
+        }
+
+
+        function turnOffHypothesis(hypothesisName) {
+            $("#"+hypothesisName).removeClass('show_hypothesis');
+            $("#palace__"+hypothesisName).attr('render', false);
+            return false;
+        }
+
+        // Filmstrip code referencing: http://codeblitz.wordpress.com/2009/05/05/jquery-animated-film-strip/
+        function moveImages(direction) {
+            var moveLength = (direction == "right" ? "+" : "-") + "=" + $('#views').width() + "px";
+            $('#views').children().animate({"left": moveLength, "opacity":"hide"}, "normal");
+        }
+
+        function ResetImages(directionMoved) {
+            // logic to move index back when left arrow is clicked
+            if (directionMoved == "left") {
+                currentIndex = currentIndex - (stripSize * 2);
+                if (currentIndex < 0) {
+                    currentIndex = images.length + currentIndex;
+                }
+            }
+         
+            $('#views').children().each(function() {
+                currentIndex += 1;
+                if (currentIndex > images.length - 1) {
+                    currentIndex = 0;
+                }
+                $(this).attr({ "src": images[currentIndex], "title": images[currentIndex] })
+                    .animate({ "left": "20px" })
+                    .animate({ "opacity": "show" });
+            });
+        }
+
+        function hoverEffects(sectionID) {
+            // x3dom stuff to highlight section
+            // Make hover caption box visible
+            // fill in caption box with description
+        }
+
+        function changeDescription(descriptionID) {
+            $("#description").load("descriptions/" + descriptionID + ".html", function() {
+            });
+        }
+
+        function changeHypothesisDescription(descriptionID) {
+            $("#hypothesis_description").load("descriptions/" + descriptionID + ".html", function() {
+            });
+        }
+
+        function changeAltDescription(descriptionID) {
+            $("#alt_description").load("descriptions/" + descriptionID + ".html", function() {
+            });
+        }
+
+
+        function check() {
+            var checkExist = setInterval(function () {
+                if ($('#x3d_palace_model').length) {
+                    $palaceElement = document.getElementById('x3d_palace_model');
+                    clearInterval(checkExist);
+                    initEventHandlers();
+                }
+            }, 100); // check every 100 ms
+        }
+
+        function initEventHandlers() {
+            initHypothesis();
+            changeDescription("view1");
+            
+            viewpoints = $("viewpoint"); 
+            viewCount = viewpoints.length;
+    
+            viewpoints.each( 
+                 function(index) {
+                    var elemID = $(viewpoints[index]).attr('id');
+                    $("#"+elemID + "_button").click(function() {
+                        // alert("clicked");
+                        activeViewIndex = parseInt(elemID.substring(12));
+                        api.seekTo(activeViewIndex-1);
+                        changeDescription("view"+activeViewIndex);
+                        $(viewpoints[index]).attr('set_bind', 'true');
+                    });
+                 }
+            );
+
+            //         newNum = new Number(index + 1); 
+            //         newElem = $('#nameClone').clone().attr('id', 'name' + newNum); 
+            //         //clones only the button 
+            //         newElem.attr('class', 'viewbutts'); // assign a classname to allow deletion of all but first button
+            //         newElem.attr('value', $(this).attr('description')); //use the animate visual effect and 
+            //         //create an anonymous function to execute when button is clicked
+            //         newElem.button().click(function() {
+            //             $(this).animate({opacity: 0.5}, 1500); 
+            //             $(Viewpoints[index]).attr('set_bind','true'); 
+            //             // this must be an actual viewpoint
+            //         }
+            //     }
+            // )
+
+
+
+
+            $('#palace__group_1').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_1').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_2').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_3').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_4').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_5').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_6').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_7').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_8').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_9').click(function() {
+                changeDescription('Found');
+            });
+            $('#palace__group_0_10').click(function() {
+                changeDescription('Found');
+            });         
+
+            $('#palace__Roof1').click(function() {
+                changeDescription('roof1');
+            });
+
+            $('#palace__Roof2').click(function() {
+                changeDescription('Roof2');
+            });
+            $('#palace__SeparateRoomRoof').click(function() {
+                changeDescription('Roof3');
+            });
+
+            $('#palace__Cistern').click(function() {
+                changeDescription('Cistern');
+            });
+
+            $('#palace__Portico1').click(function() {
+                changeDescription('Portico1');
+            });
+
+            $('#palace__Portico2').click(function() {
+                changeDescription('Portico2');
+            });
+            $('#palace__Known').click(function() {
+
+                changeDescription('Known');
+            });
+
+            $('#palace__Gate').click(function() {
+                changeDescription('Gate');
+            });
+
+            $('#palace__SW1').click(function() {
+                changeDescription('SW1');
+            });
+            $('#palace__SW2').click(function() {
+
+                changeDescription('SW2');
+            });
+
+            $('#palace__NW1').click(function() {
+                changeDescription('North1');
+            });
+            $('#palace__NE1').click(function() {
+                changeDescription('North1');
+            });
+
+            $('#palace__NW2').click(function() {
+                changeDescription('North2');
+            });
+
+            $('#palace__SeparateRoom1').click(function() {
+                changeDescription('North3');
+            });
+
+            $('#palace__SeparateRoom2').click(function() {
+                changeDescription('North3');
+            });
+
+            $('#palace__SeparateRoom3').click(function() {
+                changeDescription('North3');
+            });
+
+            $('#palace__SeparateRoom4').click(function() {
+                changeDescription('North3');
+            });
+
+            $('#palace__SeparateRoom5').click(function() {
+                changeDescription('North3');
+            });
+
+
+            $('#palace__SecondStory1').click(function() {
+                changeDescription('Secondstory1');
+            });
+            $('#palace__SecondStory2').click(function() {
+                changeDescription('Secondstory2');
+            });
+            $('#palace__SecondStory3').click(function() {
+                changeDescription('Secondstory3');
+            });
+            $('#palace__SecondStory4').click(function() {
+                changeDescription('Secondstory4');
+            });
+            $('#palace__SecondStory5').click(function() {
+                changeDescription('Secondstory5');
+            });
+            $('#palace__SecondStory6').click(function() {
+                changeDescription('Secondstory6');
+            });
+
+            $('#palace__Tower1').click(function() {
+                changeDescription('Tower1');
+            });
+            $('#palace__Tower2').click(function() {
+                changeDescription('Tower2');
+            });
+            $('#palace__group_2').click(function() {
+                changeDescription('NEStairs');
+            });
+
+            $('#palace__Nor').hover(
+                function() {
+                    var mat = document.getElementById("palace__roof1_material"); 
+                    mat.setAttribute("diffuseColor", "0.597 0.974 0.632");
+                    $("#hoverBlurb").load("blurbs/" + "roof1" + ".html", function() {
+                        $("#hoverBlurb").show();
+                    });
+                }, 
+                function() {
+                    var mat = document.getElementById("palace__roof1_material"); 
+                    mat.setAttribute("diffuseColor", "0.447 0.824 0.482");
+                    $("#hoverBlurb").hide();
+                }
+            );
+
+
+            $('#palace__southwest1').hover(
+                function() {
+                    var mat = document.getElementById("palace__southwest1_material"); 
+                    mat.setAttribute("diffuseColor", "0.903 0.356 0.872");
+                    $("#hoverBlurb").load("blurbs/" + "southwest1" + ".html", function() {
+                        $("#hoverBlurb").show();
+                    });
+                }, 
+                function() {
+                    var mat = document.getElementById("palace__southwest1_material"); 
+                    mat.setAttribute("diffuseColor", "0.753 0.216 0.722");
+                    $("#hoverBlurb").hide();
+                }
+            );
+            $('#palace__northwest1').hover(
+                function() {
+                    var mat = document.getElementById("palace__northwest1_material"); 
+                    mat.setAttribute("diffuseColor", "0.393 0.417 1.000");
+                    $("#hoverBlurb").load("blurbs/" + "northwest1" + ".html", function() {
+                        $("#hoverBlurb").show();
+                    });
+                }, 
+                function() {
+                    var mat = document.getElementById("palace__northwest1_material"); 
+                    mat.setAttribute("diffuseColor", "0.243 0.267 1.000");
+                    $("#hoverBlurb").hide();
+
+                }
+            );
+        
+            api = $("#scroller").data("scrollable");
+        }
+
+        </script>
+
+		<header>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container">
+                <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                          </button>
+                          <a class="navbar-brand" href="home.html">Diligencia Basin </a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="home.html">Home</a></li>
+                            <li><a href="history.html">History</a></li>
+				<li><a href="objects.html">3D Cross Sections</a></li>
+                            <li class="active"><a href="#">Diligencia Basin 3D Model</a></li>
+                            <li><a href="tombpage.html">Software</a></li>
+                            <li><a href="future.html">Future Ideas </a></li>
+                            <li><a href="sources.html">Sources</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+
+        </header>
+
+		<div class="row" id="container">
+<!-- 			<div id="overview_button" class="button" onclick="showContent('overview');">
+				Overview/Environment
+			</div>
+			<div id="model_button" class="button" onclick="showContent('model');">
+				Palace Model
+			</div>
+			<div id="tomb_button" class="button" onclick="javascript:location.href='tombpage.html'">
+				Tomb
+			</div>
+			<div id="other_button" class="button" onclick="javascript:location.href='objects.html'">
+				Objects
+			</div>
+            <div id="sources_button" class="button" onclick="showContent('sources')">
+                  Acknowledgements
+            </div> -->
+			<div class="col-md-3" id="left">
+<!--                         <div id="Ground" class="model_image show_hypothesis" onClick="toggleHypothesis('Ground'); changeDescription('roof1');"> <img src="img/Tower2.png"/>Ground</div>
+ -->
+
+
+
+
+
+<!--             <div id="instance_2_1" class="model_image show_hypothesis" onClick="toggleHypothesis('instance_2_1'); toggleHypothesis('instance_2_2'); toggleHypothesis('instance_2_3'); toggleHypothesis('instance_2_4'); toggleHypothesis('instance_2_5'); toggleHypothesis('instance_2_6'); toggleHypothesis('instance_2_7'); changeDescription('Roof1');"> <img src="img/Tower2.png"/><br/> Roof 1</div>
+            <div id="instance_2_2" class="show_hypothesis"></div>
+            <div id="instance_2_3" class="show_hypothesis"></div>
+            <div id="instance_2_4" class="show_hypothesis"></div>
+            <div id="instance_2_5" class="show_hypothesis"></div>
+            <div id="instance_2_6" class="show_hypothesis"></div>
+            <div id="instance_2_7" class="show_hypothesis"></div> -->
+
+
+
+
+            <h3>Present Day</h3>
+            <div id="group_0_1" class="model_image show_hypothesis" onClick="toggleHypothesis('group_1'); toggleHypothesis('group_0_1'); toggleHypothesis('group_0_2'); toggleHypothesis('group_0_3'); toggleHypothesis('group_0_4'); toggleHypothesis('group_0_5'); toggleHypothesis('group_0_6'); toggleHypothesis('group_0_7'); toggleHypothesis('group_0_8'); toggleHypothesis('group_0_9'); toggleHypothesis('group_0_10'); changeDescription('Found');"> <img src="img/Tower2.png"/><br/> Found </div>
+            <div id="group_0_2" class="show_hypothesis"></div>
+            <div id="group_0_3" class="show_hypothesis"></div>
+            <div id="group_0_4" class="show_hypothesis"></div>
+            <div id="group_0_5" class="show_hypothesis"></div>
+            <div id="group_0_6" class="show_hypothesis"></div>
+            <div id="group_0_7" class="show_hypothesis"></div>
+            <div id="group_0_8" class="show_hypothesis"></div>
+            <div id="group_0_9" class="show_hypothesis"></div>
+            <div id="group_0_10" class="show_hypothesis"></div>
+            <div id="group_1" class="show_hypothesis"></div>
+            
+            <h3> Main </h3>
+            <div id="Cistern" class="" onClick=""></div>
+            <div id="Known" class="model_image" onClick="toggleHypothesis('Known'); changeDescription('Known'); toggleHypothesis('Cistern'); toggleHypothesis('CoAKnown');"> <img src="img/Tower2.png"/> <br/>Known</div>
+            <div id="Portico1" class="model_image" onClick="toggleHypothesis('Portico1'); changeDescription('Portico1');"> <img src="img/Tower2.png"/> <br/>Portico 1</div>
+            <div id="Portico2" class="model_image" onClick="toggleHypothesis('Portico2'); changeDescription('Portico2');"> <img src="img/Tower2.png"/> <br/>Portico 2</div>
+            <div id="Gate" class="model_image" onClick="toggleHypothesis('Gate'); changeDescription('Gate');"> <img src="img/Tower2.png"/> <br/>Gate</div>
+            <div id="CoAKnown" class=""></div>
+
+
+            <h3> Southwest </h3>
+            <div id="SW1" class="model_image" onClick="toggleHypothesis('SW1'); toggleHypothesis('CoASW1'); changeDescription('SW1');"> <img src="img/Tower2.png"/> <br/>Southwest 1</div>
+            <div id="SW2" class="model_image" onClick="toggleHypothesis('SW2'); toggleHypothesis('CoASW2'); changeDescription('SW2');"> <img src="img/Tower2.png"/> <br/>Southwest 2</div>
+
+            <div id="CoASW2" class=""></div>
+            <div id="CoASW1" class=""></div>
+
+
+            <h3> North </h3>
+            <div id="NW1" class="model_image" onClick="toggleHypothesis('NW1'); toggleHypothesis('NE1'); changeDescription('North1');"> <img src="img/Tower2.png"/> <br/>North 1</div>
+
+            <div id="NW2" class="model_image" onClick="toggleHypothesis('NW2'); changeDescription('North2');"> <img src="img/Tower2.png"/> <br/>North 2</div>
+            <div id="NE1" class="" ></div>
+
+            <div id="SeparateRoom1" class="model_image" onClick="toggleHypothesis('SeparateRoom1'); toggleHypothesis('SeparateRoom2'); toggleHypothesis('SeparateRoom3'); toggleHypothesis('SeparateRoom4'); toggleHypothesis('SeparateRoom5'); changeDescription('North3');"> <img src="img/North3.png"/><br/>North 3</div>      
+            <div id="SeparateRoom2" class=""></div>
+            <div id="SeparateRoom3" class=""></div>
+            <div id="SeparateRoom4" class=""></div>
+            <div id="SeparateRoom5" class=""></div>
+            
+            <h3>Roof</h3>
+            <div id="Roof1" class="model_image " onClick="toggleHypothesis('Roof1'); changeDescription('roof1');"> <img src="img/Tower2.png"/><br/> Roof 1</div>
+            <div id="Roof2" class="model_image" onClick="toggleHypothesis('Roof2'); changeDescription('Roof2');"> <img src="img/Tower2.png"/> <br/>Roof 2</div>
+            <div id="SeparateRoomRoof" class="model_image" onClick="toggleHypothesis('SeparateRoomRoof'); changeDescription('Roof3');"> <img src="img/Tower2.png"/><br/>Roof 3</div>
+
+
+            <h3> Second Story </h3> 
+            <div id="SecondStory1" class="model_image" onClick="toggleHypothesis('SecondStory1'); toggleHypothesis('SecondStoryStairs'); changeDescription('SecondStory1');"> <img src="img/Tower2.png"/> <br/>Second Story 1</div>
+            <div id="SecondStory2" class="model_image" onClick="toggleHypothesis('SecondStory2'); toggleHypothesis('SecondStoryStairs'); changeDescription('SecondStory2');"> <img src="img/Tower2.png"/> <br/>Second Story 2</div>
+            <div id="SecondStory3" class="model_image" onClick="toggleHypothesis('SecondStory3'); changeDescription('SecondStory3');"> <img src="img/Tower2.png"/> <br/>Second Story 3</div>
+            <div id="SecondStory4" class="model_image" onClick="toggleHypothesis('SecondStory4'); toggleHypothesis('SecondStoryStairs'); changeDescription('SecondStory4');"> <img src="img/Tower2.png"/> <br/>Second Story 4</div>
+            <div id="SecondStory5" class="model_image" onClick="toggleHypothesis('SecondStory5'); changeDescription('SecondStory5');"> <img src="img/Tower2.png"/> <br/>Second Story 5</div>
+            <div id="SecondStory6" class="model_image" onClick="toggleHypothesis('SecondStory6'); toggleHypothesis('SecondStoryStairs'); changeDescription('SecondStory6');"> <img src="img/Tower2.png"/> <br/>Second Story 6</div>
+            <div id="SecondStoryStairs" class=""></div>
+
+
+            <h3> Area of Rocks </h3>
+            <div id="Tower1" class="model_image " onClick="toggleHypothesis('Tower1'); changeDescription('Tower1');"> <img src="img/Tower1.png"/> <br/>Tower 1</div>
+            <div id="Tower2" class="model_image " onClick="toggleHypothesis('Tower2'); changeDescription('Tower2');"> <img src="img/Tower2.png"/> <br/>Tower 2</div>
+            <div id="group_2" class="model_image" onClick="toggleHypothesis('group_2'); changeDescription('NEStairs');"> <img src="img/NEStairs.png"/><br/>NorthEast Stairs</div>
+
+			</div>
+			<div class="col-md-6" id="main">
+			
+            <!-- Palace model -->
+            <x3d id="x3d_palace_model" showStat='false' showLog='false' width="100%" height="100%">
+                <div id="hoverBlurb"></div>
+                <scene>
+                    <inline nameSpaceName='palace' url='palacesimplematerial.x3d'></inline>
+                </scene>
+            </x3d>
+
+			</div>
+
+
+
+			<div class="col-md-3" id="right">
+            <div id="description">
+
+<!--     			<h2 id="description_title">Palace: BF.8/9</h2>
+    			<h4> General History </h4>
+
+    			<h4> Basic Facts </h4>
+                <img src="img/excavation.png" alt="Portico Image" width="80%">
+
+                <h4> The Palace Floor Plan </h4>
+                <p> The model of the palace was based on the floor plan from the excavation site, and augmented with various hypotheses for the
+                unknown sections. </p>
+
+                <img src="img/palaceplan.jpg" width="80%" alt="Portico Image">
+    			<h4> How to Use </h4> -->
+            </div>
+			</div>
+
+
+			<div id="views">
+        <div id="view_button_container"> 
+            <div class="view_button" id="palace__view1_button"> Overview </div>
+            <div class="view_button" id="palace__view2_button"> Known</div>
+            <div class="view_button" id="palace__view3_button"> Southwest </div>
+            <div class="view_button" id="palace__view4_button"> Inner Courtyard </div>
+            <div class="view_button" id="palace__view5_button"> Inside Inner </div>
+            <div class="view_button" id="palace__view6_button"> Though Gate </div>
+            <div class="view_button" id="palace__view7_button"> Outer Courtyard </div>
+            <div class="view_button" id="palace__view8_button"> Portico </div>
+            <div class="view_button" id="palace__view10_button"> Cistern </div>
+            <div class="view_button" id="palace__view12_button"> Room 5 </div>
+            <div class="view_button" id="palace__view13_button"> Metal Working </div>
+            <div class="view_button" id="palace__view14_button"> Solid Slab </div>
+
+        </div>
+
+           <div style="position: absolute; bottom: 20px; right: 20px;"class="more_button" id="more_button" onClick="document.getElementById('more').style.display = 'block';"> How to Use This Model </div> 
+
+
+                <div style="margin:0 auto; width: 634px; height:120px;">
+                <!-- "previous page" action -->
+                <div class="nav_button" id="prev_button"><a class="prev browse left" style="text-decoration: none;" href="#" onClick="prevView();"><h3><</h3></a></div>
+
+                <!-- root element for scrollable -->
+                <div class="scrollable" id="scroller">
+
+                  <!-- root element for the items -->
+                  <div class="items">
+                    <div id="view1" class="view_image active_view" onClick="resetCurrentView(); changeDescription('view1');"> <img src="img/Overview.png"/></div>
+                    <div id="view2" class="view_image" onClick="resetCurrentView(); changeDescription('view2');"> <img src="img/KnownView.png" /></div>
+                    <div id="view3" class="view_image" onClick="resetCurrentView(); changeDescription('view3');"> <img src="img/Southwest.png" /></div>
+                    <div id="view4" class="view_image" onClick="resetCurrentView(); changeDescription('view4');"> <img src="img/Inner Courtyard.png" /></div>
+                    <div id="view5" class="view_image" onClick="resetCurrentView(); changeDescription('view5');"> <img src="img/Inside Inner Courtyard.png" /></div>
+                    <div id="view6" class="view_image" onClick="resetCurrentView(); changeDescription('view6');"> <img src="img/Through Gate.png" /></div>
+                    <div id="view7" class="view_image" onClick="resetCurrentView(); changeDescription('view7');"> <img src="img/Outer Courtyard.png" /></div>
+                    <div id="view8" class="view_image" onClick="resetCurrentView(); changeDescription('view8');"> <img src="img/Portico.png" /></div>
+                    <div id="view9" class="view_image" onClick="resetCurrentView(); changeDescription('view9');"> <img src="img/Overhead.png" /></div>
+                    <div id="view10" class="view_image" onClick="resetCurrentView(); changeDescription('view10');"> <img src="img/Cistern.png" /></div>
+                    <div id="view11" class="view_image" onClick="resetCurrentView(); changeDescription('view11');"> <img src="img/Overhead2.png" /></div>
+                    <div id="view12" class="view_image" onClick="resetCurrentView(); changeDescription('view12');"> <img src="img/Room 5.png" /></div>
+                    <div id="view13" class="view_image" onClick="resetCurrentView(); changeDescription('view13');"> <img src="img/Metal Working.png" /></div>
+                    <div id="view14" class="view_image" onClick="resetCurrentView(); changeDescription('view14');"> <img src="img/Solid Slab.png" /></div>
+
+                  </div>
+
+                </div>
+
+                <!-- "next page" action -->
+                <div class="nav_button" id="next_button"><a class="next browse right" style="text-decoration: none;" href="#" onClick="nextView();"><h3>></h3></a> </div>
+                </div>
+
+
+                <!-- <div class="nav_button" id="reset_button"><a href="#" onClick="resetCurrentView();">Reset Current</a></div> -->
+			</div>
+		</div>
+        <script>
+        $(function() {
+          // initialize scrollable
+          $(".scrollable").scrollable();
+        });
+        </script>
+		</div>
+
+		<div class="clear"></div>
+
+</body>
+</html>
