@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Stereonet - Visible Geology</title>
+        <script type="text/javascript" src="build/SNet.js"></script>
+        <script>
+        var snet;
+        $(document).ready(function() {
+                var planes = [];
+                for (var i = 0; i < 360; i+=60) {
+                    planes.push(new VG.SNetPlane(i,40));
+                };
+
+                snet = new VG.SNetManager(planes);
+
+                var c = new Contact("Stereonet");
+             
+        });
+        </script>
+        <style type="text/css">
+
+            #container{
+                background: #ddd;
+                border-left: 1px solid black;
+                position:absolute;
+                width: 300px;
+                height: 100%;
+                top:0;
+                right:0;
+                overflow: hidden;
+            }
+            #tableContainer{
+                overflow-y: scroll;
+                overflow-x: hidden;
+                bottom: 0px;
+            }
+            #groupButtons, #tableButtons{
+                background: #FF9632;
+                padding-top: 6px;
+                height: 33px;
+                border-top: 1px solid black;
+                border-bottom: 1px solid black;
+
+            }
+            a{
+                color: rgb(0, 0, 238);
+                text-decoration: none;
+                cursor: pointer;
+                display: inline;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                height: auto;
+                line-height: 21px;
+            }
+            #table, #groupTable{
+                width: 300px;
+            }
+            #holder{
+                position:absolute;
+                left:0;
+                top:0;
+            }
+            #calculatePanel{
+                background: rgba(255,150,50,0.9);
+                position:absolute;
+                width: 33px;
+                height: 200px;
+                top:50%;
+                margin:-101px 0;
+                right:248px;
+                border: 1px solid black;
+                border-radius: 5px 0 0 5px;
+            }
+            #toolTip{
+                position:absolute;
+                margin: 25px;
+                border: 1px solid black;
+                font-size: 10px;
+                font-family: Helvetica, sans-serif;
+                background-color: rgba(255,255,255,0.8);
+                box-shadow: 5px 5px 4px rgba(100,100,100,0.3);
+                padding: 8px;
+                border-radius: 3px;
+            }
+            .buttonBottom, .buttonTop{
+                position:absolute;
+                background: rgba(255,150,50,0.9);
+                padding: 5px;
+                z-index:10;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 15px;
+                line-height: 21px;
+                cursor: pointer;
+            }
+            .buttonTop{
+                top:-1px;
+                border-radius: 0 0 5px 5px;
+            }
+            .buttonBottom{
+                bottom:-1px;
+                border-radius: 5px 5px 0 0;
+            }
+            #button3D{right:310px;}
+            #buttonSave{left:10px;}
+            #buttonSVG{left:70px;}
+        </style>
+        <link type="text/css" href="build/VG.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="holder"></div>
+        <div id="calculatePanel">
+            <div id="calcPlaneIcon" class="icon"></div>
+            <div id="calcLineIcon" class="icon"></div>
+        </div>
+        <div id="container">
+            <div id="groupButtons">
+                <div id="newGroupPlaneIcon" class="icon"></div>
+                <div id="newGroupLineIcon" class="icon"></div>
+                <div id="newGroupRakeIcon" class="icon"></div>
+                <div id="newGroupSCircIcon" class="icon"></div>
+                <div id="newGroupFocalIcon" class="icon"></div>
+                <div id="newGroupRoseIcon" class="icon"></div>
+                <div id="newGroupHistIcon" class="icon"></div>
+            </div>
+            <div id="groupTable"></div>
+            <div id="tableButtons">
+                <div id="selectAllIcon" class="icon"></div>
+                <div id="selectNoneIcon" class="icon"></div>
+                <div id="trashIcon" class="icon"></div>
+                <div id="calculatorIcon" class="icon"></div>
+            </div>
+            <div id="table"></div>
+        </div>
+        <div id="button3D" class="buttonBottom">3D</div>
+        <div id="buttonSVG" class="buttonTop">SVG</div>
+        <div id="buttonSave" class="buttonTop">Save</div>
+       <script>
+            window._gaq = [['_setAccount','UA-25310626-1'],['_trackPageview'],['_trackPageLoadTime']];
+            Modernizr.load({
+            load: ('https:' == location.protocol ? '//ssl' : 'http://www') + '.google-analytics.com/ga.js'
+            });
+        </script>
+
+        <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+        chromium.org/developers/how-tos/chrome-frame-getting-started -->
+        <!--[if lt IE 7 ]>
+            <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+            <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
